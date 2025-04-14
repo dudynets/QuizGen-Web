@@ -31,6 +31,13 @@
             <input asp-for="RegisterRequest.Password" class="form-control" type="password" />
             <span asp-validation-for="RegisterRequest.Password" class="text-danger"></span>
         </div>
+
+        <div class="mb-3">
+            <label asp-for="RegisterRequest.OpenAiApiKey" class="form-label">OpenAI API Key</label>
+            <input asp-for="RegisterRequest.OpenAiApiKey" class="form-control" type="password" />
+            <div class="form-text">Your OpenAI API key is required for quiz generation.</div>
+            <span asp-validation-for="RegisterRequest.OpenAiApiKey" class="text-danger"></span>
+        </div>
         
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Register</button>

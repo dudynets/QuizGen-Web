@@ -58,6 +58,7 @@ public class AuthService : IAuthService
                 Username = request.Username,
                 PasswordHash = HashPassword(request.Password),
                 Name = request.Name,
+                OpenAiApiKey = request.OpenAiApiKey,
                 GptModel = "gpt-4o-mini"
             };
 

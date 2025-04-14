@@ -24,8 +24,9 @@ public class User : BaseEntity
     [Column("password_hash")]
     public required string PasswordHash { get; set; }
 
+    [Required]
     [Column("openai_api_key")]
-    public string? OpenAiApiKey { get; set; }
+    public required string OpenAiApiKey { get; set; }
 
     [Column("gpt_model")]
     public string GptModel { get; set; } = "gpt-4o-mini";

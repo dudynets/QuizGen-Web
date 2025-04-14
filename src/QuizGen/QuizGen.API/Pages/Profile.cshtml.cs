@@ -25,6 +25,16 @@ namespace QuizGen.API.Pages
         public string StatusMessage { get; set; }
         public bool IsSuccess { get; set; }
 
+        private int GetCurrentUserId()
+        {
+            var userId = Request.Cookies["UserId"];
+            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int currentUserId))
+            {
+                return 0;
+            }
+            return currentUserId;
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             // Check if user is authenticated
@@ -57,7 +67,7 @@ namespace QuizGen.API.Pages
                 {
                     // Populate the form with current values
                     ProfileRequest.Name = result.Data.Name;
-                    ProfileRequest.OpenAiApiKey = result.Data.OpenAiApiKey ?? "";
+                    ProfileRequest.OpenAiApiKey = result.Data.OpenAiApiKey;
                     ProfileRequest.GptModel = result.Data.GptModel;
                     
                     return Page();
@@ -84,55 +94,29 @@ namespace QuizGen.API.Pages
                 return Page();
             }
 
-            // Check if user is authenticated
-            var authToken = Request.Cookies["AuthToken"];
-            var userId = Request.Cookies["UserId"];
-
-            if (string.IsNullOrEmpty(authToken) || string.IsNullOrEmpty(userId))
+            if (string.IsNullOrWhiteSpace(ProfileRequest.OpenAiApiKey))
             {
-                return RedirectToPage("/Login");
+                ModelState.AddModelError("ProfileRequest.OpenAiApiKey", "OpenAI API key is required for quiz generation");
+                return Page();
             }
 
-            if (!int.TryParse(userId, out int currentUserId))
-            {
-                return RedirectToPage("/Login");
-            }
+            var result = await _authService.UpdateProfileAsync(
+                GetCurrentUserId(),
+                ProfileRequest.Name,
+                ProfileRequest.OpenAiApiKey,
+                ProfileRequest.GptModel
+            );
 
-            try
+            if (!result.Success)
             {
-                // Set authentication header for the request
-                if (_httpContextAccessor.HttpContext != null)
-                {
-                    _httpContextAccessor.HttpContext.Request.Headers["Authorization"] = 
-                        new StringValues($"Bearer {authToken}");
-                }
-
-                // Update profile
-                var result = await _authService.UpdateProfileAsync(
-                    currentUserId,
-                    ProfileRequest.Name,
-                    ProfileRequest.OpenAiApiKey,
-                    ProfileRequest.GptModel);
-                
-                if (result.Success)
-                {
-                    StatusMessage = "Your profile has been updated successfully.";
-                    IsSuccess = true;
-                    return Page();
-                }
-                else
-                {
-                    StatusMessage = result.Message;
-                    IsSuccess = false;
-                    return Page();
-                }
-            }
-            catch (Exception)
-            {
-                StatusMessage = "An error occurred while updating your profile.";
+                StatusMessage = result.Message;
                 IsSuccess = false;
                 return Page();
             }
+
+            StatusMessage = "Profile updated successfully";
+            IsSuccess = true;
+            return Page();
         }
     }
 } 

@@ -24,9 +24,28 @@
         
         <div class="mb-3">
             <label asp-for="ProfileRequest.OpenAiApiKey" class="form-label">OpenAI API Key</label>
-            <input asp-for="ProfileRequest.OpenAiApiKey" class="form-control" />
-            <div class="form-text">Your OpenAI API key is required for quiz generation.</div>
-            <span asp-validation-for="ProfileRequest.OpenAiApiKey" class="text-danger"></span>
+            <div class="input-group">
+                <input type="text" class="form-control" id="maskedApiKey" readonly 
+                       value="@(string.IsNullOrEmpty(Model.ProfileRequest.OpenAiApiKey) ? "" : "••••••••••••••••")"
+                       placeholder="No API key set" />
+                <button type="button" class="btn btn-outline-primary" onclick="toggleApiKeyInput()" id="editBtn">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+            </div>
+            <div class="input-group mt-2 d-none" id="editGroup">
+                <input asp-for="ProfileRequest.OpenAiApiKey" class="form-control" type="password" id="apiKeyInput" 
+                       placeholder="Enter your OpenAI API key" value="@Model.ProfileRequest.OpenAiApiKey" />
+                <button type="button" class="btn btn-outline-secondary" onclick="toggleApiKeyInput()">
+                    <i class="bi bi-check"></i> Set
+                </button>
+            </div>
+            <div class="form-text">
+                <i class="bi bi-info-circle"></i> Your OpenAI API key is required for quiz generation.
+                <a href="https://platform.openai.com/api-keys" target="_blank" class="ms-1">
+                    Get your API key <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+            <span asp-validation-for="ProfileRequest.OpenAiApiKey" class="text-danger" data-valmsg-replace="true"></span>
         </div>
         
         <div class="mb-3">
@@ -35,16 +54,63 @@
                 <option value="gpt-4o">GPT 4o</option>
                 <option value="gpt-4o-mini">GPT 4o-mini</option>
             </select>
-            <div class="form-text">Select the GPT model you want to use for quiz generation.</div>
+            <div class="form-text">
+                <i class="bi bi-info-circle"></i> Select the GPT model you want to use for quiz generation.
+            </div>
             <span asp-validation-for="ProfileRequest.GptModel" class="text-danger"></span>
         </div>
         
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Save Changes
+            </button>
         </div>
     </form>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script>
+        function toggleApiKeyInput() {
+            const maskedInput = document.getElementById('maskedApiKey');
+            const editGroup = document.getElementById('editGroup');
+            const editBtn = document.getElementById('editBtn');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            
+            if (editGroup.classList.contains('d-none')) {
+                // Switching to edit view
+                maskedInput.classList.add('d-none');
+                editGroup.classList.remove('d-none');
+                editBtn.classList.add('d-none');
+                // Ensure the input has the current value
+                apiKeyInput.value = apiKeyInput.value || '';
+                apiKeyInput.focus();
+            } else {
+                // Switching back to masked view
+                maskedInput.classList.remove('d-none');
+                editGroup.classList.add('d-none');
+                editBtn.classList.remove('d-none');
+                // Update masked value based on whether there's a value
+                maskedInput.value = apiKeyInput.value ? '••••••••••••••••' : '';
+            }
+        }
+
+        // Initialize the view based on whether there's an API key
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const maskedInput = document.getElementById('maskedApiKey');
+            
+            // Set initial masked value
+            maskedInput.value = apiKeyInput.value ? '••••••••••••••••' : '';
+            
+            // Add event listener to handle form submission
+            const form = document.getElementById('profile-form');
+            form.addEventListener('submit', function(e) {
+                if (!apiKeyInput.value) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 } 
