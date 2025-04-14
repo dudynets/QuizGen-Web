@@ -53,20 +53,6 @@
         <div class="alert alert-info">
             You don't have any quizzes yet. Click on "Create New Quiz" to get started!
         </div>
-        
-        @if (string.IsNullOrEmpty(Model.ErrorMessage))
-        {
-            <div class="card mt-4">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Debug Information</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Debug Info:</strong> @Model.DebugInfo</p>
-                    <p><strong>User ID from cookie:</strong> @(Model.HttpContext.Request.Cookies["UserId"] ?? "Not found")</p>
-                    <p><strong>Environment:</strong> @(Model.HttpContext.RequestServices.GetService<IWebHostEnvironment>()?.EnvironmentName ?? "Unknown")</p>
-                </div>
-            </div>
-        }
     }
 </div>
 

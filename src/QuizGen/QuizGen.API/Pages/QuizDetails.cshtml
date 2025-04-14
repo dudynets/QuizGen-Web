@@ -166,15 +166,25 @@
 @section Scripts {
     <script>
         function downloadFile(url, filename) {
+            const token = getCookie('AuthToken');
+            if (!token) {
+                alert('Authentication token not found. Please log in again.');
+                return;
+            }
+
             fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${getCookie('AuthToken')}`
-                }
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/octet-stream'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    return response.text().then(text => {
+                        throw new Error(`Error ${response.status}: ${text}`);
+                    });
                 }
                 return response.blob();
             })

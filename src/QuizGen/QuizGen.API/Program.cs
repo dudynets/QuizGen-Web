@@ -97,7 +97,7 @@ builder.Services.AddCors(options =>
 var appConfig = new AppConfig
 {
     DatabaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection"),
-    LocalSettingsPath = "appsettings.json"
+    LocalSettingsPath = builder.Environment.IsDevelopment() ? "appsettings.Development.json" : "appsettings.json"
 };
 
 // Add BLL and DAL services
@@ -124,12 +124,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseCors("AllowAll");
 
-// Add Authentication middleware
+// Add Authentication middleware before static files
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStaticFiles();
+app.UseCors("AllowAll");
 
 app.MapControllers();
 app.MapRazorPages();
