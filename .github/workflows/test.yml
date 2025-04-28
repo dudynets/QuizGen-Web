@@ -1,0 +1,36 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore test dependencies
+        run: dotnet restore src/QuizGen/QuizGen.Tests/QuizGen.Tests.csproj
+
+      - name: Run tests
+        run: dotnet test src/QuizGen/QuizGen.Tests/QuizGen.Tests.csproj --configuration Release --no-restore --verbosity normal
