@@ -1,0 +1,142 @@
+/* 
+ * Additional styles to fix UI issues 
+ * This will override any problematic styles 
+ */
+
+/* Fix table contrast issues */
+.table {
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+    margin-bottom: 0 !important;
+}
+
+.table th {
+    color: #e2e8f0 !important;
+    font-weight: 600 !important;
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.table td {
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+    padding: 0.75rem 1rem !important;
+}
+
+/* Fix table rows */
+.table tbody tr:nth-of-type(odd) {
+    background-color: #1e293b !important;
+}
+
+.table tbody tr:nth-of-type(even) {
+    background-color: #263449 !important;
+}
+
+.table tbody tr:hover {
+    background-color: #334155 !important;
+}
+
+/* Fix badge styles */
+.badge {
+    font-weight: 500 !important;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 4px !important;
+}
+
+.badge.bg-primary {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-secondary {
+    background-color: #64748b !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-warning {
+    background-color: #f59e0b !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+.badge.bg-success {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-danger {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+/* Score text */
+.text-success {
+    color: #10b981 !important;
+    font-weight: bold !important;
+}
+
+.text-warning {
+    color: #f59e0b !important;
+    font-weight: bold !important;
+}
+
+.text-danger {
+    color: #ef4444 !important;
+    font-weight: bold !important;
+}
+
+/* Card styles */
+.card {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-header {
+    background-color: #1e293b !important;
+    border-bottom-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.card-body {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+
+/* Text contrast fixes */
+h1, h2, h3, h4, h5, h6, p, span, div, td, th {
+    color: #e2e8f0 !important;
+}
+
+.text-muted {
+    color: #94a3b8 !important;
+}
+
+small, .small {
+    color: #94a3b8 !important;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
+
+.btn-outline-primary {
+    color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3b82f6 !important;
+    color: white !important;
+} 
+

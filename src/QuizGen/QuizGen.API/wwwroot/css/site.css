@@ -1,7 +1,21 @@
+:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --text-color: #e2e8f0;
+    --text-muted: #94a3b8;
+    --bg-color: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-surface-hover: #334155;
+    --border-color: #334155;
+    --danger-color: #ef4444;
+    --success-color: #10b981;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 html {
     font-size: 14px;
-    position: relative;
-    min-height: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
 }
 
 @media (min-width: 768px) {
@@ -11,41 +25,822 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
+main {
+    flex: 1 0 auto;
+    padding: 2rem 0;
 }
 
-.form-container {
-    max-width: 500px;
-    margin: 0 auto;
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: 4px;
+    background-color: var(--bg-surface);
+    box-shadow: var(--card-shadow);
+    transition: all 0.2s ease-in-out;
 }
 
-.validation-summary-errors ul {
-    color: #dc3545;
-    padding-left: 20px;
+/* Remove hover effect from cards */
+.card:hover {
+    background-color: var(--bg-surface);
 }
 
-.field-validation-error {
-    color: #dc3545;
+.card-header {
+    background-color: var(--bg-surface);
+    border-bottom-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.card-header h2 {
+    color: var(--text-color);
+}
+
+.card-footer {
+    background-color: var(--bg-surface);
+    border-top-color: var(--border-color);
+}
+
+/* Form Styles */
+.form-control {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    background-color: var(--bg-surface);
+    border-color: var(--primary-color);
+    box-shadow: none;
+    color: var(--text-color);
+}
+
+/* Improve placeholder text visibility */
+::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+.form-select {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e2e8f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.form-select:focus {
+    background-color: var(--bg-surface);
+    border-color: var(--primary-color);
+    box-shadow: none;
+    color: var(--text-color);
+}
+
+.form-select option {
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.form-text {
+    color: var(--text-muted);
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
     font-size: 0.875rem;
 }
 
+.btn-lg {
+    padding: 1rem 2rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+}
+
+.btn-outline-success {
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+    background-color: transparent;
+}
+
+.btn-outline-success:hover {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.btn-outline-danger {
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+    background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-light {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-color);
+}
+
+.btn-light:hover {
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+}
+
+.btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--bg-surface);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color) !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 4px;
+    color: var(--text-color) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Form Container */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--bg-surface);
+    border-radius: 4px;
+    box-shadow: var(--card-shadow);
+}
+
+/* Validation Styles */
+.validation-summary-errors ul {
+    color: var(--danger-color);
+    padding-left: 0;
+    list-style-type: none;
+    margin-bottom: 1rem;
+}
+
+.field-validation-error {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
 .input-validation-error {
-    border-color: #dc3545;
+    border-color: var(--danger-color);
 }
 
 .input-validation-error:focus {
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    border-color: var(--danger-color);
+    box-shadow: none;
 }
 
+/* Alert Styles */
 .alert {
-    margin-top: 1rem;
+    border-radius: 4px;
+    border: none;
+    padding: 1rem;
+    margin: 1rem 0;
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+}
+
+.alert-danger {
+    border-left: 4px solid var(--danger-color);
+}
+
+.alert-info {
+    border-left: 4px solid var(--primary-color);
+}
+
+.alert-success {
+    border-left: 4px solid var(--success-color);
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+}
+
+.badge.bg-primary {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    color: var(--primary-color);
+}
+
+.badge.bg-secondary {
+    background-color: rgba(148, 163, 184, 0.2) !important;
+    color: var(--text-muted);
+}
+
+.badge.bg-success {
+    background-color: rgba(16, 185, 129, 0.2) !important;
+    color: var(--success-color);
+}
+
+.badge.bg-warning {
+    background-color: rgba(245, 158, 11, 0.2) !important;
+    color: #f59e0b;
+}
+
+/* Badge in Progress */
+.badge.bg-warning.text-dark {
+    color: #f59e0b !important;
+}
+
+.badge.bg-warning.text-white {
+    color: white !important;
+    background-color: #d97706 !important;
+}
+
+/* Custom badges in the table */
+.table .badge {
+    color: white !important;
+}
+
+/* Quiz List Styles */
+.quiz-card {
+    height: 100%;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Remove hover effect from quiz cards */
+.quiz-card:hover {
+    transform: none;
+}
+
+.quiz-card .card-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.quiz-card .card-text {
+    color: var(--text-muted);
+}
+
+.quiz-card .card-footer {
+    background-color: transparent;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--bg-surface);
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+/* Table Styles */
+.table {
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table thead {
+    background-color: #1e293b !important;
+}
+
+.table th {
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    font-size: 0.875rem !important;
+    border-color: var(--border-color) !important;
+    background-color: #1e293b !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.table td {
+    padding: 0.75rem 1rem !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table tbody tr {
+    border-color: var(--border-color) !important;
+}
+
+.table tbody tr:nth-of-type(odd) {
+    background-color: #1e293b !important;
+}
+
+.table tbody tr:nth-of-type(even) {
+    background-color: #263449 !important;
+}
+
+/* Table rows - remove hover effect */
+.table-hover tbody tr:hover,
+.table tbody tr:hover {
+    background-color: #334155 !important;
+}
+
+.table .bg-light {
+    background-color: var(--bg-surface-hover) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--bg-surface-hover);
+}
+
+/* Modal Styles */
+.modal-content {
+    background-color: var(--bg-surface);
+    border: none;
+    border-radius: 4px;
+    color: var(--text-color);
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+.modal-footer {
+    border-top-color: var(--border-color);
+}
+
+/* Quiz Try Styles */
+.quiz-try {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.quiz-try .question {
+    background: var(--bg-surface);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+}
+
+.quiz-try .question-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.quiz-try .options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.quiz-try .option {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Maintain hover effect on options since they are clickable */
+.quiz-try .option:hover {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--primary-color);
+}
+
+.quiz-try .option.selected {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-color: var(--primary-color);
+}
+
+/* Form elements */
+.form-check-input {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    color: var(--text-color);
+}
+
+textarea {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+textarea:focus {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-color) !important;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--border-color);
+}
+
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Progress bar */
+.progress {
+    background-color: var(--bg-surface-hover);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+/* Text colors */
+.text-success {
+    color: #10b981 !important;
+    font-weight: bold !important;
+}
+
+.text-danger {
+    color: #ef4444 !important;
+    font-weight: bold !important;
+}
+
+.text-warning {
+    color: #f59e0b !important;
+    font-weight: bold !important;
+}
+
+.text-muted {
+    color: rgba(148, 163, 184, 0.9) !important;
+}
+
+.text-dark {
+    color: var(--text-color) !important;
+}
+
+/* Background colors */
+.bg-white {
+    background-color: var(--bg-surface) !important;
+}
+
+.bg-light {
+    background-color: var(--bg-surface) !important;
+}
+
+.bg-surface {
+    background-color: var(--bg-surface) !important;
+}
+
+.border-0 {
+    border: none !important;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.dropdown-item {
+    color: var(--text-color);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-color);
+}
+
+.dropdown-toggle::after {
+    color: var(--text-color);
+}
+
+/* Container adjustments */
+.container {
+    padding: 0 1rem;
+}
+
+/* Answer result styling */
+.correct-answer {
+    color: var(--success-color) !important;
+    font-weight: 500;
+}
+
+.incorrect-answer {
+    color: var(--danger-color) !important;
+    font-weight: 500;
+}
+
+.answer-explanation {
+    color: var(--text-muted) !important;
+    font-style: italic;
+}
+
+/* Accordion styles */
+.accordion-button {
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-color);
+}
+
+.accordion-button::after {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.accordion-body {
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+}
+
+/* Fix for text-dark everywhere */
+.text-dark {
+    color: var(--text-color) !important;
+}
+
+/* Disabled and readonly inputs */
+.form-control:disabled, .form-control[readonly] {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .form-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .quiz-try .question {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}
+
+/* List Group Styles */
+.list-group-item {
+    background-color: var(--bg-surface);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.list-group-item:hover {
+    background-color: var(--bg-surface);
+}
+
+/* Text and heading styles */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+h1.text-center, h2.text-center {
+    color: var(--text-color);
+}
+
+/* Links */
+a {
+    transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* Form Placeholders in Dark Mode */
+input::placeholder, textarea::placeholder {
+    color: rgba(148, 163, 184, 0.8) !important;
+}
+
+/* Fix 0% score display */
+.score-display {
+    color: var(--text-color) !important;
+}
+
+/* Export and View buttons in tables */
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-success, .btn-outline-danger {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Fix for in-progress badge visibility */
+.badge.in-progress {
+    background-color: #f59e0b !important;
+    color: #0f172a !important;
+    font-weight: bold;
+}
+
+/* Table cells and headers */
+.table th, .table td {
+    color: var(--text-color);
+}
+
+/* Indicator for all clickable elements */
+a:not(.btn), .dropdown-toggle, button:not(.btn-close) {
+    cursor: pointer;
+}
+
+/* Additional text visibility improvements */
+p, span, div, label, h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+/* Form elements focus and active states */
+.form-control:focus, .form-select:focus, textarea:focus {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+/* Make radio and checkbox more visible when checked */
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--bg-surface), 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Improve muted text contrast */
+.text-muted {
+    color: rgba(148, 163, 184, 0.9) !important;
+}
+
+small, .small {
+    color: var(--text-muted);
+}
+
+/* Improve form text readability */
+.form-text {
+    color: rgba(148, 163, 184, 0.9) !important;
+}
+
+/* Table appearance improvements */
+thead {
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    color: var(--text-color);
+}
+
+/* Remaining badge improvements */
+.badge {
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+}
+
+/* Improve dropdown menu appearance */
+.dropdown-toggle::after {
+    vertical-align: middle;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+}
+
+/* Clickable cards for linked content */
+a .card, button .card {
+    transition: transform 0.2s ease-in-out;
+}
+
+a:hover .card, button:hover .card {
+    transform: translateY(-2px);
+}
+
+/* Fix all badge colors */
+.badge.bg-primary {
+    background-color: #2563eb !important;
+    color: white !important;
+}
+
+.badge.bg-secondary {
+    background-color: #64748b !important;
+    color: white !important;
+}
+
+.badge.bg-success {
+    background-color: #10b981 !important;
+    color: white !important;
+}
+
+.badge.bg-warning {
+    background-color: #f59e0b !important;
+    color: #0f172a !important;
+}
+
+.badge.bg-danger {
+    background-color: #ef4444 !important;
+    color: white !important;
+}
+
+/* Card header and body */
+.card-header {
+    background-color: #1e293b !important;
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.card-body {
+    background-color: #1e293b !important;
+    color: var(--text-color) !important;
+}
+
+.card {
+    background-color: #1e293b !important;
 } 
+
+td {
+    background: none !important;
+}

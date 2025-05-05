@@ -4,21 +4,21 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to QuizGen</h1>
-    <p class="lead">Create and take quizzes with our powerful quiz generation platform.</p>
+<div class="text-center py-5">
+    <h1 class="mb-4">Welcome to QuizGen</h1>
+    <p class="mb-5 text-muted">Create and take quizzes with our powerful quiz generation platform.</p>
     
     @if (Model.IsAuthenticated)
     {
-        <div class="mt-4">
-            <a href="/QuizList" class="btn btn-primary me-2">My Quizzes</a>
-            <a href="/CreateQuiz" class="btn btn-success">Create New Quiz</a>
+        <div class="d-grid gap-3 mx-auto" style="max-width: 300px;">
+            <a href="/QuizList" class="btn btn-primary">My Quizzes</a>
+            <a href="/CreateQuiz" class="btn btn-outline-primary">Create New Quiz</a>
         </div>
     }
     else
     {
-        <div class="mt-4">
-            <a href="/Login" class="btn btn-primary me-2">Login</a>
+        <div class="d-grid gap-3 mx-auto" style="max-width: 300px;">
+            <a href="/Login" class="btn btn-primary">Login</a>
             <a href="/Register" class="btn btn-outline-primary">Register</a>
         </div>
     }
