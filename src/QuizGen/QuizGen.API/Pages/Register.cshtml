@@ -5,43 +5,49 @@
 }
 
 <div class="form-container">
-    <h2>Register</h2>
-    <hr />
+    <div class="text-center mb-5">
+        <h2>Create Account</h2>
+        <p class="text-muted">Join QuizGen</p>
+    </div>
     
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger">@Model.ErrorMessage</div>
+        <div class="alert alert-danger">
+            @Model.ErrorMessage
+        </div>
     }
     
     <form id="register-form" method="post">
-        <div class="mb-3">
-            <label asp-for="RegisterRequest.Name" class="form-label">Name</label>
-            <input asp-for="RegisterRequest.Name" class="form-control" />
+        <div class="mb-4">
+            <label asp-for="RegisterRequest.Name" class="form-label">Full Name</label>
+            <input asp-for="RegisterRequest.Name" class="form-control" placeholder="Enter your full name" />
             <span asp-validation-for="RegisterRequest.Name" class="text-danger"></span>
         </div>
         
-        <div class="mb-3">
+        <div class="mb-4">
             <label asp-for="RegisterRequest.Username" class="form-label">Username</label>
-            <input asp-for="RegisterRequest.Username" class="form-control" />
+            <input asp-for="RegisterRequest.Username" class="form-control" placeholder="Choose a username" />
             <span asp-validation-for="RegisterRequest.Username" class="text-danger"></span>
         </div>
         
-        <div class="mb-3">
+        <div class="mb-4">
             <label asp-for="RegisterRequest.Password" class="form-label">Password</label>
-            <input asp-for="RegisterRequest.Password" class="form-control" type="password" />
+            <input asp-for="RegisterRequest.Password" class="form-control" type="password" placeholder="Create a password" />
             <span asp-validation-for="RegisterRequest.Password" class="text-danger"></span>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label asp-for="RegisterRequest.OpenAiApiKey" class="form-label">OpenAI API Key</label>
-            <input asp-for="RegisterRequest.OpenAiApiKey" class="form-control" type="password" />
-            <div class="form-text">Your OpenAI API key is required for quiz generation.</div>
+            <input asp-for="RegisterRequest.OpenAiApiKey" class="form-control" type="password" placeholder="Enter your OpenAI API key" />
+            <div class="form-text text-muted">
+                Required for quiz generation. Your key is secure.
+            </div>
             <span asp-validation-for="RegisterRequest.OpenAiApiKey" class="text-danger"></span>
         </div>
         
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Register</button>
-            <a href="/Login" class="btn btn-link">Already have an account? Login</a>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Create Account</button>
+            <a href="/Login" class="btn btn-outline-primary">Sign In</a>
         </div>
     </form>
 </div>

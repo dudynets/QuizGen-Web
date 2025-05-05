@@ -5,30 +5,34 @@
 }
 
 <div class="form-container">
-    <h2>Login</h2>
-    <hr />
+    <div class="text-center mb-5">
+        <h2>Sign In</h2>
+        <p class="text-muted">Access your account</p>
+    </div>
     
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger">@Model.ErrorMessage</div>
+        <div class="alert alert-danger">
+            @Model.ErrorMessage
+        </div>
     }
     
     <form id="login-form" method="post">
-        <div class="mb-3">
+        <div class="mb-4">
             <label asp-for="LoginRequest.Username" class="form-label">Username</label>
-            <input asp-for="LoginRequest.Username" class="form-control" />
+            <input asp-for="LoginRequest.Username" class="form-control" placeholder="Enter your username" />
             <span asp-validation-for="LoginRequest.Username" class="text-danger"></span>
         </div>
         
-        <div class="mb-3">
+        <div class="mb-4">
             <label asp-for="LoginRequest.Password" class="form-label">Password</label>
-            <input asp-for="LoginRequest.Password" class="form-control" type="password" />
+            <input asp-for="LoginRequest.Password" class="form-control" type="password" placeholder="Enter your password" />
             <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
         </div>
         
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="/Register" class="btn btn-link">Register if you don't have an account</a>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+            <a href="/Register" class="btn btn-outline-primary">Create Account</a>
         </div>
     </form>
 </div>
