@@ -4,10 +4,10 @@
     ViewData["Title"] = "Quiz Results";
 }
 
-<div class="container mt-4">
+<div class="py-4">
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger">
             @Model.ErrorMessage
         </div>
     }
@@ -15,7 +15,7 @@
     {
         <div class="card">
             <div class="card-header">
-                <h2>Quiz Results</h2>
+                <h2 class="mb-0">Quiz Results</h2>
             </div>
             <div class="card-body">
                 <div class="row mb-4">
@@ -24,7 +24,7 @@
                         <p class="text-muted">Completed on @Model.QuizResult.FinishedAt.ToString("g")</p>
                     </div>
                     <div class="col-md-6 text-end">
-                        <h3>Score: @Math.Round(Model.QuizResult.Score)%</h3>
+                        <h3 class="score-display">Score: @Math.Round(Model.QuizResult.Score)%</h3>
                         <p>@Model.QuizResult.CorrectAnswers out of @Model.QuizResult.TotalQuestions correct</p>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="list-group">
                     @foreach (var question in Model.QuizResult.Questions)
                     {
-                        <div class="list-group-item">
+                        <div class="list-group-item bg-surface">
                             <h5 class="mb-3">@question.Text</h5>
                             <div class="mb-2">
                                 <strong>Your answer:</strong>
@@ -41,7 +41,7 @@
                                     <span class="d-inline-flex flex-wrap">
                                         @foreach (var answer in question.Answers.Where(a => a.WasSelected))
                                         {
-                                            <span class="@(answer.IsCorrect ? "text-success" : "text-danger")">@answer.Text</span>
+                                            <span class="@(answer.IsCorrect ? "correct-answer" : "incorrect-answer")">@answer.Text</span>
                                             @if (!answer.Equals(question.Answers.Where(a => a.WasSelected).Last()))
                                             {
                                                 <span>,&nbsp;</span>
@@ -51,19 +51,19 @@
                                 }
                                 else
                                 {
-                                    <span class="text-danger">No answer selected</span>
+                                    <span class="incorrect-answer">No answer selected</span>
                                 }
                             </div>
                             @if (!question.IsCorrect)
                             {
-                                <div class="text-success">
+                                <div class="correct-answer">
                                     <strong>Correct answer:</strong> @(string.Join(", ", question.Answers.Where(a => a.IsCorrect).Select(a => a.Text)) ?? "No correct answer")
                                 </div>
                             }
                             @if (!string.IsNullOrEmpty(question.Explanation))
                             {
-                                <div class="mt-2 text-muted">
-                                    <i class="bi bi-info-circle"></i> @question.Explanation
+                                <div class="mt-2 answer-explanation">
+                                    @question.Explanation
                                 </div>
                             }
                         </div>
@@ -71,8 +71,8 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="/quizzes" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Back to Quizzes
+                    <a href="/QuizList" class="btn btn-outline-primary">
+                        Back to Quizzes
                     </a>
                     <a href="/quiz/@Model.AttemptId/try" class="btn btn-primary ms-2">
                         Try Again
