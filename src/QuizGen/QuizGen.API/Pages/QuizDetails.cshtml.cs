@@ -10,6 +10,7 @@ namespace QuizGen.API.Pages
     {
         private readonly IQuizService _quizService;
         private readonly IQuizTryService _quizTryService;
+        private const int PageSize = 5;
 
         public QuizDetailsModel(
             IQuizService quizService, 
@@ -23,9 +24,21 @@ namespace QuizGen.API.Pages
         public string ErrorMessage { get; private set; }
         public QuizDto? Quiz { get; private set; }
         public IEnumerable<QuizTryDto> QuizTries { get; private set; } = Enumerable.Empty<QuizTryDto>();
+        public IEnumerable<QuizTryDto> PagedQuizTries { get; private set; } = Enumerable.Empty<QuizTryDto>();
 
         [BindProperty(SupportsGet = true)]
         public int QuizId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+
+        public int TotalPages { get; private set; }
+        public int TotalItems { get; private set; }
+        public bool HasPreviousPage => CurrentPage > 1;
+        public bool HasNextPage => CurrentPage < TotalPages;
+
+        // Property for PageSize to be used in the view
+        public int GetPageSize => PageSize;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -76,6 +89,27 @@ namespace QuizGen.API.Pages
                 return Page();
             }
 
+            // Apply pagination
+            if (QuizTries != null)
+            {
+                // Always sort attempts by date (newest first)
+                var allQuizTries = QuizTries.OrderByDescending(x => x.StartedAt).ToList();
+                TotalItems = allQuizTries.Count;
+                TotalPages = TotalItems > 0 ? (int)Math.Ceiling(TotalItems / (double)PageSize) : 1;
+                
+                // Ensure current page is within valid range
+                if (CurrentPage < 1)
+                    CurrentPage = 1;
+                else if (CurrentPage > TotalPages && TotalPages > 0)
+                    CurrentPage = TotalPages;
+                
+                // Apply pagination
+                PagedQuizTries = allQuizTries
+                    .Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+            }
+
             return Page();
         }
 
@@ -98,7 +132,7 @@ namespace QuizGen.API.Pages
                 var quizTriesResult = await _quizTryService.GetQuizTriesByQuizAsync(QuizId);
                 if (quizTriesResult.Success)
                 {
-                    QuizTries = quizTriesResult.Data;
+                    QuizTries = quizTriesResult.Data.ToList();
                 }
                 else
                 {

@@ -5,6 +5,9 @@ public class GeneratedQuiz
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
     [JsonPropertyName("questions")]
     public List<GeneratedQuestion> Questions { get; set; } = new();
 }

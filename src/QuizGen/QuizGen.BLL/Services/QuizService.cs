@@ -68,7 +68,7 @@ public class QuizService : IQuizService
             {
                 AuthorId = authorId,
                 Name = generatedQuiz.Name,
-                Prompt = topic,
+                Prompt = generatedQuiz.Description ?? $"A quiz about {topic} with a {difficulty} difficulty level, covering key concepts and testing your knowledge.",
                 Difficulty = difficulty,
                 NumQuestions = numQuestions,
                 AllowedTypes = allowedTypes,

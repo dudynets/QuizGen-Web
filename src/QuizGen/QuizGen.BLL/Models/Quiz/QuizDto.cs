@@ -7,6 +7,7 @@ public class QuizDto
     public string Name { get; set; }
     public string AuthorName { get; set; }
     public string Prompt { get; set; }
+    public string Description => Prompt;
     public string Difficulty { get; set; }
     public int NumQuestions { get; set; }
     public string[] AllowedTypes { get; set; }

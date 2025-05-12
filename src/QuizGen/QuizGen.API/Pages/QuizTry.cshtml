@@ -17,6 +17,14 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h1 class="h3 mb-1">@Model.QuizTry.QuizName</h1>
+                @if (!string.IsNullOrEmpty(Model.QuizTry.QuizDescription))
+                {
+                    <p class="text-muted mb-2">@Model.QuizTry.QuizDescription</p>
+                }
+                else if (!string.IsNullOrEmpty(Model.QuizTry.QuizPrompt))
+                {
+                    <p class="text-muted mb-2">@Model.QuizTry.QuizPrompt</p>
+                }
                 <div class="text-muted">
                     Question @(Model.QuizTry.CurrentQuestionIndex + 1) of @Model.QuizTry.TotalQuestions
                 </div>

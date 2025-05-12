@@ -9,6 +9,7 @@ namespace QuizGen.API.Pages
     public class QuizListModel : PageModel
     {
         private readonly IQuizService _quizService;
+        private const int PageSize = 9;
 
         public QuizListModel(IQuizService quizService)
         {
@@ -24,6 +25,20 @@ namespace QuizGen.API.Pages
 
         [BindProperty]
         public int QuizId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; } = string.Empty;
+
+        public int TotalPages { get; private set; }
+        public int TotalItems { get; private set; }
+        public bool HasPreviousPage => CurrentPage > 1;
+        public bool HasNextPage => CurrentPage < TotalPages;
+        
+        // Property for PageSize to be used in the view
+        public int GetPageSize => PageSize;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -53,7 +68,33 @@ namespace QuizGen.API.Pages
                 
                 if (result.Success)
                 {
-                    Quizzes = result.Data;
+                    var allQuizzes = result.Data.ToList();
+                    
+                    // Sort quizzes by creation date (newest first)
+                    allQuizzes = allQuizzes.OrderByDescending(q => q.CreatedAt).ToList();
+                    
+                    // Apply search filter if provided
+                    if (!string.IsNullOrWhiteSpace(SearchTerm))
+                    {
+                        allQuizzes = allQuizzes
+                            .Where(q => q.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                            .ToList();
+                    }
+                    
+                    TotalItems = allQuizzes.Count;
+                    TotalPages = TotalItems > 0 ? (int)Math.Ceiling(TotalItems / (double)PageSize) : 1;
+                    
+                    // Ensure current page is within valid range
+                    if (CurrentPage < 1)
+                        CurrentPage = 1;
+                    else if (CurrentPage > TotalPages && TotalPages > 0)
+                        CurrentPage = TotalPages;
+                    
+                    // Apply pagination
+                    Quizzes = allQuizzes
+                        .Skip((CurrentPage - 1) * PageSize)
+                        .Take(PageSize)
+                        .ToList();
                 }
                 else
                 {

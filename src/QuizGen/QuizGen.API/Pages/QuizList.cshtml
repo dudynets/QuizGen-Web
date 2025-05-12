@@ -5,9 +5,39 @@
 }
 
 <div class="py-4">
-    <div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>My Quizzes</h1>
         <a href="/CreateQuiz" class="btn btn-primary">Create New Quiz</a>
+    </div>
+
+    <!-- Search Form -->
+    <div class="mb-4">
+        <form method="get" class="row g-2">
+            <div class="col-md-10 col-lg-11">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary border-end-0 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary border-start-0" 
+                           placeholder="Search by quiz title..." 
+                           asp-for="SearchTerm" aria-label="Search quizzes">
+                </div>
+            </div>
+            <div class="col-md-2 col-lg-1">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <div class="col-12 mt-2">
+                    <span class="badge bg-primary">
+                        Searching: "@Model.SearchTerm" 
+                        <a asp-page="/QuizList" class="text-white ms-2">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </a>
+                    </span>
+                </div>
+            }
+        </form>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
@@ -30,7 +60,7 @@
                                 <span class="badge bg-primary">@quiz.Difficulty</span>
                                 <span class="badge bg-secondary">@quiz.NumQuestions questions</span>
                             </div>
-                            <p class="card-text text-muted small mb-3">@quiz.Prompt</p>
+                            <p class="card-text text-muted small mb-3">@(quiz.Description ?? quiz.Prompt)</p>
                             <div class="text-muted small mb-3">
                                 Created: @quiz.CreatedAt.ToString("MMM dd, yyyy")
                             </div>
@@ -53,13 +83,117 @@
                 </div>
             }
         </div>
+
+        <!-- Pagination Controls -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Quiz pagination">
+                    <ul class="pagination">
+                        <!-- Previous page -->
+                        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                            <a class="page-link bg-dark text-white border-0" 
+                               asp-page="/QuizList" 
+                               asp-route-currentPage="@(Model.CurrentPage - 1)" 
+                               asp-route-searchTerm="@Model.SearchTerm" 
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        
+                        @{
+                            const int maxDisplayedPages = 5;
+                            int startPage = Math.Max(1, Model.CurrentPage - (maxDisplayedPages / 2));
+                            int endPage = Math.Min(Model.TotalPages, startPage + maxDisplayedPages - 1);
+                            
+                            if (endPage - startPage + 1 < maxDisplayedPages)
+                            {
+                                startPage = Math.Max(1, endPage - maxDisplayedPages + 1);
+                            }
+                            
+                            if (startPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link bg-dark text-white border-0" 
+                                       asp-page="/QuizList" 
+                                       asp-route-currentPage="1" 
+                                       asp-route-searchTerm="@Model.SearchTerm">1</a>
+                                </li>
+                                if (startPage > 2)
+                                {
+                                    <li class="page-item disabled">
+                                        <a class="page-link bg-dark text-white border-0">...</a>
+                                    </li>
+                                }
+                            }
+                            
+                            for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link @(i == Model.CurrentPage ? "bg-primary" : "bg-dark") text-white border-0" 
+                                       asp-page="/QuizList" 
+                                       asp-route-currentPage="@i" 
+                                       asp-route-searchTerm="@Model.SearchTerm">@i</a>
+                                </li>
+                            }
+                            
+                            if (endPage < Model.TotalPages)
+                            {
+                                if (endPage < Model.TotalPages - 1)
+                                {
+                                    <li class="page-item disabled">
+                                        <a class="page-link bg-dark text-white border-0">...</a>
+                                    </li>
+                                }
+                                <li class="page-item">
+                                    <a class="page-link bg-dark text-white border-0" 
+                                       asp-page="/QuizList" 
+                                       asp-route-currentPage="@Model.TotalPages" 
+                                       asp-route-searchTerm="@Model.SearchTerm">@Model.TotalPages</a>
+                                </li>
+                            }
+                        }
+                        
+                        <!-- Next page -->
+                        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                            <a class="page-link bg-dark text-white border-0" 
+                               asp-page="/QuizList" 
+                               asp-route-currentPage="@(Model.CurrentPage + 1)" 
+                               asp-route-searchTerm="@Model.SearchTerm" 
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="text-center text-white mt-2 small">
+                @if (Model.TotalItems > 0)
+                {
+                    <span>Showing @((Model.CurrentPage - 1) * Model.GetPageSize + 1) to @(Math.Min(Model.CurrentPage * Model.GetPageSize, Model.TotalItems)) of @Model.TotalItems quizzes</span>
+                }
+                else
+                {
+                    <span>No quizzes to display</span>
+                }
+            </div>
+        }
     }
     else
     {
         <div class="text-center py-5">
-            <h3 class="mb-3">No Quizzes Yet</h3>
-            <p class="text-muted mb-4">Start creating quizzes to test your knowledge.</p>
-            <a href="/CreateQuiz" class="btn btn-primary">Create Your First Quiz</a>
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <h3 class="mb-3">No Matching Quizzes</h3>
+                <p class="text-muted mb-4">No quizzes match your search term "@Model.SearchTerm"</p>
+                <a asp-page="/QuizList" class="btn btn-primary">Clear Search</a>
+            }
+            else
+            {
+                <h3 class="mb-3">No Quizzes Yet</h3>
+                <p class="text-muted mb-4">Start creating quizzes to test your knowledge.</p>
+                <a href="/CreateQuiz" class="btn btn-primary">Create Your First Quiz</a>
+            }
         </div>
     }
 </div>

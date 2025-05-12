@@ -20,7 +20,7 @@
         <div class="card mb-4">
             <div class="card-body p-4">
                 <h1 class="h3 mb-4">@Model.Quiz.Name</h1>
-                <p class="text-muted mb-4">@Model.Quiz.Prompt</p>
+                <p class="text-muted mb-4">@(Model.Quiz.Description ?? Model.Quiz.Prompt)</p>
                 
                 <div class="mb-4">
                     <span class="badge bg-primary">@Model.Quiz.Difficulty</span>
@@ -60,7 +60,7 @@
             <div class="card-body p-0">
                 @if (Model.QuizTries != null && Model.QuizTries.Any())
                 {
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="overflow-x: unset">
                         <table class="table mb-0">
                             <thead>
                                 <tr>
@@ -72,7 +72,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var quizTry in Model.QuizTries.OrderByDescending(x => x.StartedAt))
+                                @foreach (var quizTry in Model.PagedQuizTries)
                                 {
                                     <tr>
                                         <td>@quizTry.Id</td>
@@ -142,6 +142,84 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Pagination Controls -->
+                    @if (Model.TotalPages > 1)
+                    {
+                        <div class="d-flex justify-content-center mt-3 mb-3">
+                            <nav aria-label="Quiz attempts pagination">
+                                <ul class="pagination">
+                                    <!-- Previous page -->
+                                    <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                                        <a class="page-link bg-dark text-white border-0" 
+                                           href="/QuizDetails/@Model.QuizId?currentPage=@(Model.CurrentPage - 1)" 
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    
+                                    @{
+                                        const int maxDisplayedPages = 5;
+                                        int startPage = Math.Max(1, Model.CurrentPage - (maxDisplayedPages / 2));
+                                        int endPage = Math.Min(Model.TotalPages, startPage + maxDisplayedPages - 1);
+                                        
+                                        if (endPage - startPage + 1 < maxDisplayedPages)
+                                        {
+                                            startPage = Math.Max(1, endPage - maxDisplayedPages + 1);
+                                        }
+                                        
+                                        if (startPage > 1)
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link bg-dark text-white border-0" 
+                                                   href="/QuizDetails/@Model.QuizId?currentPage=1">1</a>
+                                            </li>
+                                            if (startPage > 2)
+                                            {
+                                                <li class="page-item disabled">
+                                                    <a class="page-link bg-dark text-white border-0">...</a>
+                                                </li>
+                                            }
+                                        }
+                                        
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                                <a class="page-link @(i == Model.CurrentPage ? "bg-primary" : "bg-dark") text-white border-0" 
+                                                   href="/QuizDetails/@Model.QuizId?currentPage=@i">@i</a>
+                                            </li>
+                                        }
+                                        
+                                        if (endPage < Model.TotalPages)
+                                        {
+                                            if (endPage < Model.TotalPages - 1)
+                                            {
+                                                <li class="page-item disabled">
+                                                    <a class="page-link bg-dark text-white border-0">...</a>
+                                                </li>
+                                            }
+                                            <li class="page-item">
+                                                <a class="page-link bg-dark text-white border-0" 
+                                                   href="/QuizDetails/@Model.QuizId?currentPage=@Model.TotalPages">@Model.TotalPages</a>
+                                            </li>
+                                        }
+                                    }
+                                    
+                                    <!-- Next page -->
+                                    <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                                        <a class="page-link bg-dark text-white border-0" 
+                                           href="/QuizDetails/@Model.QuizId?currentPage=@(Model.CurrentPage + 1)" 
+                                           aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="text-center text-white mb-3 small">
+                            <span>Showing @((Model.CurrentPage - 1) * Model.GetPageSize + 1) to @(Math.Min(Model.CurrentPage * Model.GetPageSize, Model.TotalItems)) of @Model.TotalItems attempts</span>
+                        </div>
+                    }
                 }
                 else
                 {

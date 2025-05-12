@@ -7,6 +7,7 @@ public class QuizTryDetailsDto
     public int UserId { get; set; }
     public string QuizName { get; set; }
     public string QuizPrompt { get; set; }
+    public string QuizDescription => QuizPrompt;
     public string Difficulty { get; set; }
     public int CurrentQuestionIndex { get; set; }
     public int TotalQuestions { get; set; }

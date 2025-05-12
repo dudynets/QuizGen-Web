@@ -13,7 +13,7 @@ public class OpenAiService : IOpenAiService
     public async Task<ServiceResult<GeneratedQuiz>> GenerateQuizAsync(
         QuizGenerationRequest request,
         string apiKey,
-        string model = "gpt-4o-mini")
+        string model = "gpt-4.1-nano")
     {
         var _client = new OpenAIClient(apiKey);
 
@@ -32,6 +32,11 @@ You are a professional quiz generator for the QuizGen AI application. Your task 
     - True-false: Always two options ("True"/"False")
     - All questions must have 2-6 options
     - Each question must have a clear, concise explanation
+
+3. Quiz structure:
+    - Create a clear, concise title
+    - Write a 1-2 sentence description summarizing the quiz content and topics covered
+    - Generate diverse, engaging questions
 
 You will receive input in this format:
 {
@@ -56,6 +61,10 @@ If user's prompt does not make sense, or do not match the specified input format
                     "name": {
                         "type": "string",
                         "description": "Short description of what the quiz is about in a single sentence."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A 1-2 sentence description of what the quiz is about, what topics it covers, and what the user should expect to learn."
                     },
                     "questions": {
                         "type": "array",
@@ -115,6 +124,7 @@ If user's prompt does not make sense, or do not match the specified input format
                     },
                     "required": [
                     "name",
+                    "description",
                     "questions"
                     ],
                     "additionalProperties": false
